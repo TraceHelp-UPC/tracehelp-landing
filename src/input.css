@@ -1,0 +1,68 @@
+@import "tailwindcss";
+
+/* Clases que el simulador arma dinámicamente en JavaScript */
+@source inline("text-amber text-emerald text-cyan bg-amber bg-emerald bg-cyan");
+
+/* Tokens de la guía de estilos de TraceHelp (Capítulo VI) */
+@theme {
+  --color-navy-950: #071120;
+  --color-navy-900: #0B192C; /* Corporate Navy */
+  --color-navy-800: #10223A;
+  --color-navy-700: #1A3150;
+  --color-navy-600: #26426A;
+  --color-electric: #2563EB; /* Electric Blue */
+  --color-electric-hover: #1D4ED8;
+  --color-cyan: #06B6D4; /* Cyber Cyan */
+  --color-emerald: #10B981; /* Emerald Pass */
+  --color-amber: #F59E0B; /* Amber Warning */
+  --color-crimson: #EF4444; /* Crimson Error */
+  --color-ink: #E2E8F0;
+  --color-muted: #94A3B8;
+
+  --font-display: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-navy-900 text-ink font-sans antialiased;
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-cyan);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg bg-electric px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-electric-hover;
+  }
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg border border-navy-600 px-5 py-3 text-sm font-semibold text-ink transition-colors hover:border-muted hover:bg-navy-800;
+  }
+}
+
+/* Revelado escalonado de las etapas del triaje en el simulador */
+.stage {
+  opacity: 0.25;
+  transition: opacity 400ms ease;
+}
+.stage.is-done {
+  opacity: 1;
+}
