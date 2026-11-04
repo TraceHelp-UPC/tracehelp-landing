@@ -263,14 +263,90 @@
         </div>
       </section>
 
-      <!-- ============ Llamado final ============ -->
-      <section class="border-t border-navy-700">
-        <div class="mx-auto flex max-w-7xl flex-col items-start justify-between gap-6 px-5 py-16 lg:flex-row lg:items-center lg:px-8">
+      <!-- ============ Prueba de concepto (US02) ============ -->
+      <section id="demo" class="scroll-mt-16 border-t border-navy-700 bg-navy-950/60">
+        <div class="mx-auto grid max-w-7xl gap-12 px-5 py-20 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-16 lg:px-8 lg:py-28">
           <div>
-            <h2 class="font-display text-2xl font-bold text-white sm:text-3xl">Pruébalo con los manuales de tu empresa</h2>
-            <p class="mt-2 text-muted">Cargamos tu documentación y medimos el ahorro con tu propio equipo durante 14 días.</p>
+            <h2 class="font-display text-3xl font-bold tracking-tight text-white sm:text-4xl">Prueba TraceHelp durante 14 días</h2>
+            <p class="mt-4 max-w-lg text-lg text-muted">
+              Sin compromiso de permanencia. Trabajamos con tus manuales y tu equipo, y al final te entregamos el ahorro medido.
+            </p>
+
+            <ol class="mt-10 space-y-6">
+              <li class="flex gap-4">
+                <span class="grid size-8 shrink-0 place-items-center rounded-full border border-navy-600 font-display text-sm font-bold text-cyan">1</span>
+                <div>
+                  <h3 class="font-semibold text-white">Firmamos un acuerdo de confidencialidad</h3>
+                  <p class="mt-1 text-sm text-muted">Antes de recibir cualquier documento de tu empresa.</p>
+                </div>
+              </li>
+              <li class="flex gap-4">
+                <span class="grid size-8 shrink-0 place-items-center rounded-full border border-navy-600 font-display text-sm font-bold text-cyan">2</span>
+                <div>
+                  <h3 class="font-semibold text-white">Cargamos tus manuales técnicos</h3>
+                  <p class="mt-1 text-sm text-muted">PDF o Markdown, en un espacio aislado solo para tu organización.</p>
+                </div>
+              </li>
+              <li class="flex gap-4">
+                <span class="grid size-8 shrink-0 place-items-center rounded-full border border-navy-600 font-display text-sm font-bold text-cyan">3</span>
+                <div>
+                  <h3 class="font-semibold text-white">Tus analistas lo usan con tickets reales</h3>
+                  <p class="mt-1 text-sm text-muted">Validan cada respuesta antes de enviarla, como en producción.</p>
+                </div>
+              </li>
+              <li class="flex gap-4">
+                <span class="grid size-8 shrink-0 place-items-center rounded-full border border-navy-600 font-display text-sm font-bold text-cyan">4</span>
+                <div>
+                  <h3 class="font-semibold text-white">Recibes un informe de ahorro</h3>
+                  <p class="mt-1 text-sm text-muted">Tiempo de resolución, tickets resueltos con IA y horas recuperadas.</p>
+                </div>
+              </li>
+            </ol>
           </div>
-          <a href="#demo" class="btn-primary shrink-0">Solicitar una demo de 14 días</a>
+
+          <div class="rounded-2xl border border-navy-700 bg-navy-900 p-6 sm:p-8">
+            <form id="demo-form" novalidate class="space-y-5" aria-describedby="demo-form-status">
+              <div>
+                <label for="demo-name" class="text-sm font-medium text-ink">Nombre y apellido</label>
+                <input id="demo-name" name="nombre" type="text" autocomplete="name" required maxlength="120"
+                  class="mt-2 block w-full rounded-lg border border-navy-600 bg-navy-950 px-4 py-3 text-sm text-white placeholder:text-muted/60 focus:border-cyan focus:outline-none" placeholder="Roberto Pérez" />
+                <p class="mt-1.5 hidden text-xs text-crimson" data-error-for="demo-name"></p>
+              </div>
+              <div>
+                <label for="demo-email" class="text-sm font-medium text-ink">Correo corporativo</label>
+                <input id="demo-email" name="email" type="email" autocomplete="email" required maxlength="255"
+                  class="mt-2 block w-full rounded-lg border border-navy-600 bg-navy-950 px-4 py-3 text-sm text-white placeholder:text-muted/60 focus:border-cyan focus:outline-none" placeholder="roberto.perez@empresa.pe" />
+                <p class="mt-1.5 hidden text-xs text-crimson" data-error-for="demo-email"></p>
+              </div>
+              <div>
+                <label for="demo-company" class="text-sm font-medium text-ink">Empresa</label>
+                <input id="demo-company" name="empresa" type="text" autocomplete="organization" required maxlength="150"
+                  class="mt-2 block w-full rounded-lg border border-navy-600 bg-navy-950 px-4 py-3 text-sm text-white placeholder:text-muted/60 focus:border-cyan focus:outline-none" placeholder="Empresa S.A.C." />
+                <p class="mt-1.5 hidden text-xs text-crimson" data-error-for="demo-company"></p>
+              </div>
+              <div>
+                <label for="demo-itsm" class="text-sm font-medium text-ink">¿Qué herramienta usa hoy tu mesa de ayuda?</label>
+                <select id="demo-itsm" name="sistema_itsm" required
+                  class="mt-2 block w-full rounded-lg border border-navy-600 bg-navy-950 px-4 py-3 text-sm text-white focus:border-cyan focus:outline-none">
+                  <option value="">Selecciona una opción</option>
+                  <option>Jira Service Management</option>
+                  <option>ServiceNow</option>
+                  <option>Freshservice</option>
+                  <option>GLPI</option>
+                  <option>Correo o WhatsApp</option>
+                  <option>Otra</option>
+                </select>
+                <p class="mt-1.5 hidden text-xs text-crimson" data-error-for="demo-itsm"></p>
+              </div>
+
+              <!-- Campo trampa para bots: las personas no lo ven -->
+              <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" class="hidden" aria-hidden="true" />
+
+              <button type="submit" class="btn-primary w-full disabled:cursor-not-allowed disabled:opacity-60">Agendar mi prueba de 14 días</button>
+              <p id="demo-form-status" class="hidden rounded-lg px-4 py-3 text-sm" role="status" aria-live="polite"></p>
+              <p class="text-xs text-muted">Usamos tus datos solo para coordinar la prueba. No los compartimos con terceros.</p>
+            </form>
+          </div>
         </div>
       </section>
     </main>
@@ -298,5 +374,6 @@
     <script src="assets/js/config.js"></script>
     <script src="assets/js/main.js"></script>
     <script src="assets/js/simulator.js"></script>
+    <script src="assets/js/demo-form.js"></script>
   </body>
 </html>
