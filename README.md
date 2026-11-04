@@ -25,9 +25,15 @@ assets/js/simulator.js  # Simulador ilustrativo del triaje
 assets/img/             # Logo, favicon e imagen para redes sociales
 ```
 
+## Publicación (GitHub Pages)
+
+Cada push a `main` ejecuta `.github/workflows/deploy-pages.yml`, que compila el CSS y publica el sitio en
+https://tracehelp-upc.github.io/tracehelp-landing/
+
+Configuración única del repositorio: **Settings → Pages → Build and deployment → Source: GitHub Actions**.
+
 ## Pendiente por tarea del Sprint 1
 
-- T53: publicación automática en GitHub Pages.
 - T54 (US02): sección `#demo` con el formulario de prueba de concepto.
 - T55 (US03): sección `#roi` con la calculadora.
 - T56 (US04): sección `#seguridad`, contacto y política de privacidad.
