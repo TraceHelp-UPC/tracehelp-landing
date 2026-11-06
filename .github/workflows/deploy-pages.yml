@@ -38,9 +38,10 @@ jobs:
       - name: Preparar la carpeta del sitio
         run: |
           mkdir -p _site
-          cp index.html _site/
+          cp *.html _site/
           cp -r assets _site/
           test -s _site/assets/css/styles.css
+          test -s _site/privacidad.html
 
       - name: Configurar GitHub Pages
         uses: actions/configure-pages@v5
