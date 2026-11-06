@@ -263,6 +263,90 @@
         </div>
       </section>
 
+      <!-- ============ Calculadora de ROI (US03) ============ -->
+      <section id="roi" class="scroll-mt-16 border-t border-navy-700 bg-navy-950/60" aria-labelledby="roi-titulo">
+        <div class="mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-28">
+          <div class="mx-auto max-w-2xl text-center">
+            <h2 id="roi-titulo" class="font-display text-3xl font-bold tracking-tight text-white sm:text-4xl">Calcula tu ahorro operativo</h2>
+            <p class="mt-4 text-lg text-muted">
+              Mueve los controles con los datos de tu mesa de ayuda. El cálculo se hace en tu navegador: no enviamos ni guardamos estas cifras.
+            </p>
+          </div>
+
+          <form id="roi-form" novalidate class="mt-12 grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)]" aria-describedby="roi-status">
+            <!-- Entradas -->
+            <fieldset class="rounded-2xl border border-navy-700 bg-navy-900 p-6 sm:p-8">
+              <legend class="sr-only">Datos de tu mesa de ayuda</legend>
+
+              <div>
+                <div class="flex items-center justify-between gap-4">
+                  <label for="roi-tickets" class="text-sm font-medium text-ink">Tickets al mes</label>
+                  <input id="roi-tickets" name="tickets" type="number" inputmode="numeric" min="1" max="20000" step="1" value="1200" required
+                    class="w-28 rounded-lg border border-navy-600 bg-navy-950 px-3 py-2 text-right font-mono text-sm text-white focus:border-cyan focus:outline-none" />
+                </div>
+                <input id="roi-tickets-range" type="range" min="50" max="10000" step="50" value="1200" aria-label="Tickets al mes" data-roi-range-for="roi-tickets"
+                  class="mt-4 w-full accent-electric" />
+                <div class="mt-1 flex justify-between text-xs text-muted/80" aria-hidden="true"><span>50</span><span>10 000</span></div>
+                <p class="mt-1.5 hidden text-xs text-crimson" data-roi-error-for="roi-tickets"></p>
+              </div>
+
+              <div class="mt-8">
+                <div class="flex items-center justify-between gap-4">
+                  <label for="roi-analysts" class="text-sm font-medium text-ink">Analistas de soporte L1</label>
+                  <input id="roi-analysts" name="analysts" type="number" inputmode="numeric" min="1" max="500" step="1" value="6" required
+                    class="w-28 rounded-lg border border-navy-600 bg-navy-950 px-3 py-2 text-right font-mono text-sm text-white focus:border-cyan focus:outline-none" />
+                </div>
+                <input id="roi-analysts-range" type="range" min="1" max="60" step="1" value="6" aria-label="Analistas de soporte L1" data-roi-range-for="roi-analysts"
+                  class="mt-4 w-full accent-electric" />
+                <div class="mt-1 flex justify-between text-xs text-muted/80" aria-hidden="true"><span>1</span><span>60</span></div>
+                <p class="mt-1.5 hidden text-xs text-crimson" data-roi-error-for="roi-analysts"></p>
+              </div>
+
+              <details class="mt-8 rounded-lg border border-navy-700 bg-navy-950/60 px-4 py-3 text-sm text-muted">
+                <summary class="cursor-pointer font-medium text-ink">Supuestos del cálculo</summary>
+                <ul class="mt-3 space-y-1.5 text-xs leading-relaxed">
+                  <li>Costo de atender un ticket en Nivel 1: <span class="text-ink" data-roi-assumption="costL1"></span>.</li>
+                  <li>Costo de resolverlo por autoservicio con IA: <span class="text-ink" data-roi-assumption="costSelfService"></span>.</li>
+                  <li>Tickets que se resuelven por autoservicio: <span class="text-ink" data-roi-assumption="deflectionRate"></span> (referencia conservadora; Freshworks reporta hasta 53 %).</li>
+                  <li>Tiempo de un analista por ticket L1: <span class="text-ink" data-roi-assumption="minutesPerTicket"></span>.</li>
+                </ul>
+              </details>
+            </fieldset>
+
+            <!-- Resultados -->
+            <div class="flex flex-col rounded-2xl border border-navy-700 bg-navy-900 p-6 sm:p-8" aria-live="polite">
+              <p id="roi-status" class="hidden rounded-lg border border-amber/40 bg-amber/10 px-4 py-3 text-sm text-amber" role="status"></p>
+
+              <div class="grid gap-4 sm:grid-cols-3" data-roi-results>
+                <div class="rounded-xl border border-navy-700 bg-navy-950 p-5">
+                  <p class="text-xs font-medium text-muted">Ahorro mensual</p>
+                  <p class="mt-2 font-display text-3xl font-extrabold text-emerald" data-roi-output="monthlySavings">—</p>
+                  <p class="mt-1 text-xs text-muted/80"><span data-roi-output="annualSavings">—</span> al año</p>
+                </div>
+                <div class="rounded-xl border border-navy-700 bg-navy-950 p-5">
+                  <p class="text-xs font-medium text-muted">Horas liberadas al mes</p>
+                  <p class="mt-2 font-display text-3xl font-extrabold text-white" data-roi-output="hoursFreed">—</p>
+                  <p class="mt-1 text-xs text-muted/80"><span data-roi-output="hoursPerAnalyst">—</span> por analista</p>
+                </div>
+                <div class="rounded-xl border border-navy-700 bg-navy-950 p-5">
+                  <p class="text-xs font-medium text-muted">Carga por analista</p>
+                  <p class="mt-2 font-display text-3xl font-extrabold text-white" data-roi-output="ticketsPerAnalystAfter">—</p>
+                  <p class="mt-1 text-xs text-muted/80">tickets al mes, antes <span data-roi-output="ticketsPerAnalystBefore">—</span></p>
+                </div>
+              </div>
+
+              <p class="mt-6 text-sm leading-relaxed text-muted" data-roi-output="summary"></p>
+
+              <div class="mt-auto flex flex-col gap-3 pt-8 sm:flex-row">
+                <a href="#demo" class="btn-primary flex-1" data-roi-to-demo>Probarlo con mis datos</a>
+                <a href="#casos" class="btn-secondary flex-1">Ver resultados de clientes</a>
+              </div>
+              <p class="mt-4 text-xs text-muted/80">Estimación referencial. El ahorro real se mide durante la prueba de 14 días con tus propios tickets.</p>
+            </div>
+          </form>
+        </div>
+      </section>
+
       <!-- ============ Prueba de concepto (US02) ============ -->
       <section id="demo" class="scroll-mt-16 border-t border-navy-700 bg-navy-950/60">
         <div class="mx-auto grid max-w-7xl gap-12 px-5 py-20 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-16 lg:px-8 lg:py-28">
@@ -339,6 +423,11 @@
                 <p class="mt-1.5 hidden text-xs text-crimson" data-error-for="demo-itsm"></p>
               </div>
 
+              <!-- Datos de la calculadora de ROI (US03); se llenan con "Probarlo con mis datos" -->
+              <input type="hidden" name="tickets_mensuales" data-roi-hidden="tickets" />
+              <input type="hidden" name="analistas_l1" data-roi-hidden="analysts" />
+              <p class="hidden rounded-lg border border-navy-600 bg-navy-950 px-4 py-3 text-xs text-muted" data-roi-demo-note></p>
+
               <!-- Campo trampa para bots: las personas no lo ven -->
               <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" class="hidden" aria-hidden="true" />
 
@@ -374,6 +463,7 @@
     <script src="assets/js/config.js"></script>
     <script src="assets/js/main.js"></script>
     <script src="assets/js/simulator.js"></script>
+    <script src="assets/js/roi-calculator.js"></script>
     <script src="assets/js/demo-form.js"></script>
   </body>
 </html>

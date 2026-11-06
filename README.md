@@ -23,6 +23,7 @@ assets/js/config.js     # URLs externas (portal de Appsmith)
 assets/js/main.js       # Menú móvil y enlaces
 assets/js/simulator.js  # Simulador ilustrativo del triaje
 assets/js/demo-form.js  # Validación y envío del formulario de prueba (Formspree)
+assets/js/roi-calculator.js  # Calculadora de ROI en el navegador (US03)
 assets/img/             # Logo, favicon e imagen para redes sociales
 ```
 
@@ -35,6 +36,5 @@ Configuración única del repositorio: **Settings → Pages → Build and deploy
 
 ## Pendiente por tarea del Sprint 1
 
-- T55 (US03): sección `#roi` con la calculadora.
 - T56 (US04): sección `#seguridad`, contacto y política de privacidad.
 - T57 (US05): sección `#casos` con casos de éxito.
