@@ -263,6 +263,201 @@
         </div>
       </section>
 
+      <!-- ============ Calculadora de ROI (US03) ============ -->
+      <section id="roi" class="scroll-mt-16 border-t border-navy-700 bg-navy-950/60" aria-labelledby="roi-titulo">
+        <div class="mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-28">
+          <div class="mx-auto max-w-2xl text-center">
+            <h2 id="roi-titulo" class="font-display text-3xl font-bold tracking-tight text-white sm:text-4xl">Calcula tu ahorro operativo</h2>
+            <p class="mt-4 text-lg text-muted">
+              Mueve los controles con los datos de tu mesa de ayuda. El cálculo se hace en tu navegador: no enviamos ni guardamos estas cifras.
+            </p>
+          </div>
+
+          <form id="roi-form" novalidate class="mt-12 grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)]" aria-describedby="roi-status">
+            <!-- Entradas -->
+            <fieldset class="rounded-2xl border border-navy-700 bg-navy-900 p-6 sm:p-8">
+              <legend class="sr-only">Datos de tu mesa de ayuda</legend>
+
+              <div>
+                <div class="flex items-center justify-between gap-4">
+                  <label for="roi-tickets" class="text-sm font-medium text-ink">Tickets al mes</label>
+                  <input id="roi-tickets" name="tickets" type="number" inputmode="numeric" min="1" max="20000" step="1" value="1200" required
+                    class="w-28 rounded-lg border border-navy-600 bg-navy-950 px-3 py-2 text-right font-mono text-sm text-white focus:border-cyan focus:outline-none" />
+                </div>
+                <input id="roi-tickets-range" type="range" min="50" max="10000" step="50" value="1200" aria-label="Tickets al mes" data-roi-range-for="roi-tickets"
+                  class="mt-4 w-full accent-electric" />
+                <div class="mt-1 flex justify-between text-xs text-muted/80" aria-hidden="true"><span>50</span><span>10 000</span></div>
+                <p class="mt-1.5 hidden text-xs text-crimson" data-roi-error-for="roi-tickets"></p>
+              </div>
+
+              <div class="mt-8">
+                <div class="flex items-center justify-between gap-4">
+                  <label for="roi-analysts" class="text-sm font-medium text-ink">Analistas de soporte L1</label>
+                  <input id="roi-analysts" name="analysts" type="number" inputmode="numeric" min="1" max="500" step="1" value="6" required
+                    class="w-28 rounded-lg border border-navy-600 bg-navy-950 px-3 py-2 text-right font-mono text-sm text-white focus:border-cyan focus:outline-none" />
+                </div>
+                <input id="roi-analysts-range" type="range" min="1" max="60" step="1" value="6" aria-label="Analistas de soporte L1" data-roi-range-for="roi-analysts"
+                  class="mt-4 w-full accent-electric" />
+                <div class="mt-1 flex justify-between text-xs text-muted/80" aria-hidden="true"><span>1</span><span>60</span></div>
+                <p class="mt-1.5 hidden text-xs text-crimson" data-roi-error-for="roi-analysts"></p>
+              </div>
+
+              <details class="mt-8 rounded-lg border border-navy-700 bg-navy-950/60 px-4 py-3 text-sm text-muted">
+                <summary class="cursor-pointer font-medium text-ink">Supuestos del cálculo</summary>
+                <ul class="mt-3 space-y-1.5 text-xs leading-relaxed">
+                  <li>Costo de atender un ticket en Nivel 1: <span class="text-ink" data-roi-assumption="costL1"></span>.</li>
+                  <li>Costo de resolverlo por autoservicio con IA: <span class="text-ink" data-roi-assumption="costSelfService"></span>.</li>
+                  <li>Tickets que se resuelven por autoservicio: <span class="text-ink" data-roi-assumption="deflectionRate"></span> (referencia conservadora; Freshworks reporta hasta 53 %).</li>
+                  <li>Tiempo de un analista por ticket L1: <span class="text-ink" data-roi-assumption="minutesPerTicket"></span>.</li>
+                </ul>
+              </details>
+            </fieldset>
+
+            <!-- Resultados -->
+            <div class="flex flex-col rounded-2xl border border-navy-700 bg-navy-900 p-6 sm:p-8" aria-live="polite">
+              <p id="roi-status" class="hidden rounded-lg border border-amber/40 bg-amber/10 px-4 py-3 text-sm text-amber" role="status"></p>
+
+              <div class="grid gap-4 sm:grid-cols-3" data-roi-results>
+                <div class="rounded-xl border border-navy-700 bg-navy-950 p-5">
+                  <p class="text-xs font-medium text-muted">Ahorro mensual</p>
+                  <p class="mt-2 font-display text-2xl font-extrabold text-emerald xl:text-3xl" data-roi-output="monthlySavings">—</p>
+                  <p class="mt-1 text-xs text-muted/80"><span data-roi-output="annualSavings">—</span> al año</p>
+                </div>
+                <div class="rounded-xl border border-navy-700 bg-navy-950 p-5">
+                  <p class="text-xs font-medium text-muted">Horas liberadas al mes</p>
+                  <p class="mt-2 font-display text-2xl font-extrabold text-white xl:text-3xl" data-roi-output="hoursFreed">—</p>
+                  <p class="mt-1 text-xs text-muted/80"><span data-roi-output="hoursPerAnalyst">—</span> por analista</p>
+                </div>
+                <div class="rounded-xl border border-navy-700 bg-navy-950 p-5">
+                  <p class="text-xs font-medium text-muted">Carga por analista</p>
+                  <p class="mt-2 font-display text-2xl font-extrabold text-white xl:text-3xl" data-roi-output="ticketsPerAnalystAfter">—</p>
+                  <p class="mt-1 text-xs text-muted/80">tickets al mes, antes <span data-roi-output="ticketsPerAnalystBefore">—</span></p>
+                </div>
+              </div>
+
+              <p class="mt-6 text-sm leading-relaxed text-muted" data-roi-output="summary"></p>
+
+              <div class="mt-auto flex flex-col gap-3 pt-8 sm:flex-row">
+                <a href="#demo" class="btn-primary flex-1" data-roi-to-demo>Probarlo con mis datos</a>
+                <a href="#casos" class="btn-secondary flex-1">Ver casos de éxito</a>
+              </div>
+              <p class="mt-4 text-xs text-muted/80">Estimación referencial. El ahorro real se mide durante la prueba de 14 días con tus propios tickets.</p>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- ============ Seguridad (US04) ============ -->
+      <section id="seguridad" class="scroll-mt-16 border-t border-navy-700" aria-labelledby="seguridad-titulo">
+        <div class="mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-28">
+          <div class="max-w-2xl">
+            <h2 id="seguridad-titulo" class="font-display text-3xl font-bold tracking-tight text-white sm:text-4xl">Tus datos se quedan en tu empresa</h2>
+            <p class="mt-4 text-lg text-muted">
+              TraceHelp está diseñado para que ningún dato sensible llegue a un modelo de IA externo y para que cada decisión quede registrada.
+            </p>
+          </div>
+
+          <div class="mt-12 overflow-hidden rounded-2xl border border-navy-700 bg-[linear-gradient(120deg,#10223A_0%,#0B192C_55%,rgba(37,99,235,0.25)_100%)] p-8 sm:p-10">
+            <div class="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+              <div class="max-w-2xl">
+                <p class="inline-flex items-center gap-2 rounded-full border border-emerald/40 bg-emerald/10 px-3 py-1 text-xs font-medium text-emerald">
+                  <span class="size-1.5 rounded-full bg-emerald" aria-hidden="true"></span>
+                  Arquitectura privada por cliente
+                </p>
+                <h3 class="mt-4 font-display text-2xl font-bold text-white">Un espacio aislado para cada organización</h3>
+                <p class="mt-3 text-sm leading-relaxed text-muted">
+                  Tus manuales, tickets y métricas viven en un espacio de trabajo propio. Ningún otro cliente puede consultarlos y no se usan para entrenar modelos públicos.
+                  Los controles siguen las buenas prácticas de ISO/IEC 27001 y la Ley N.° 29733 de Protección de Datos Personales.
+                </p>
+              </div>
+              <a href="#demo" class="btn-secondary shrink-0 border-muted/50">Solicitar una revisión de seguridad</a>
+            </div>
+          </div>
+
+          <ul class="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            <li class="rounded-2xl border border-navy-700 bg-navy-900 p-6">
+              <svg class="size-6 text-cyan" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 12s3.5-6 9-6 9 6 9 6-3.5 6-9 6-9-6-9-6Z" /><path d="M4 4l16 16" /></svg>
+              <h3 class="mt-4 font-semibold text-white">Anonimización previa</h3>
+              <p class="mt-2 text-sm leading-relaxed text-muted">Contraseñas, tokens, correos, IP y DNI se reemplazan por etiquetas antes de cualquier consulta a la IA, con un sello de auditoría.</p>
+            </li>
+            <li class="rounded-2xl border border-navy-700 bg-navy-900 p-6">
+              <svg class="size-6 text-cyan" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="4" y="10" width="16" height="10" rx="2" /><path d="M8 10V7a4 4 0 0 1 8 0v3" /></svg>
+              <h3 class="mt-4 font-semibold text-white">Acceso por roles</h3>
+              <p class="mt-2 text-sm leading-relaxed text-muted">Colaboradores, analistas L1, especialistas L2 y líderes de TI ven solo lo que su rol permite. Las sesiones usan tokens firmados que expiran.</p>
+            </li>
+            <li class="rounded-2xl border border-navy-700 bg-navy-900 p-6">
+              <svg class="size-6 text-cyan" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M7 4h8l4 4v12H7z" /><path d="M10 12h6M10 16h6" /></svg>
+              <h3 class="mt-4 font-semibold text-white">Bitácora auditable</h3>
+              <p class="mt-2 text-sm leading-relaxed text-muted">Cada respuesta generada, aprobación o edición de un analista queda registrada con su huella de integridad para revisiones posteriores.</p>
+            </li>
+            <li class="rounded-2xl border border-navy-700 bg-navy-900 p-6">
+              <svg class="size-6 text-cyan" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z" /><path d="M9 12l2 2 4-4" /></svg>
+              <h3 class="mt-4 font-semibold text-white">Sin respuestas inventadas</h3>
+              <p class="mt-2 text-sm leading-relaxed text-muted">Si la coincidencia con tus manuales no supera el umbral, la IA no responde y el ticket pasa a una persona. Toda respuesta cita su fuente.</p>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- ============ Casos de éxito (US05) ============ -->
+      <section id="casos" class="scroll-mt-16 border-t border-navy-700 bg-navy-950/60" aria-labelledby="casos-titulo">
+        <div class="mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-28">
+          <div class="max-w-2xl">
+            <h2 id="casos-titulo" class="font-display text-3xl font-bold tracking-tight text-white sm:text-4xl">Casos de éxito</h2>
+            <p class="mt-4 text-lg text-muted" data-cases-intro></p>
+          </div>
+
+          <!-- Banner de resultados -->
+          <div class="mt-12 grid overflow-hidden rounded-2xl border border-navy-700 bg-[linear-gradient(120deg,#10223A_0%,#0B192C_60%,rgba(6,182,212,0.18)_100%)] lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)]">
+            <div class="p-8 sm:p-10">
+              <p class="text-sm font-medium text-cyan" data-cases-banner-eyebrow></p>
+              <h3 class="mt-2 font-display text-2xl font-bold text-white" data-cases-banner-title></h3>
+              <p class="mt-3 max-w-xl text-sm leading-relaxed text-muted" data-cases-banner-text></p>
+              <div class="mt-5 hidden items-center gap-2" data-cases-rating>
+                <span class="flex text-amber" aria-hidden="true" data-cases-stars></span>
+                <span class="text-sm text-ink" data-cases-rating-text></span>
+              </div>
+              <a href="#demo" class="btn-primary mt-7">Postular al programa</a>
+            </div>
+            <dl class="grid grid-cols-1 gap-px border-t border-navy-700 bg-navy-700 sm:grid-cols-3 lg:grid-cols-1 lg:border-l lg:border-t-0" data-cases-metrics></dl>
+          </div>
+
+          <!-- Tarjetas de casos -->
+          <ul class="mt-8 grid gap-6 lg:grid-cols-3" data-cases-list></ul>
+          <p class="mt-6 text-xs text-muted/80" data-cases-disclaimer></p>
+        </div>
+      </section>
+
+      <!-- ============ Nosotros (US04) ============ -->
+      <section id="nosotros" class="scroll-mt-16 border-t border-navy-700 bg-navy-950/60" aria-labelledby="nosotros-titulo">
+        <div class="mx-auto grid max-w-7xl gap-12 px-5 py-20 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-16 lg:px-8">
+          <div>
+            <h2 id="nosotros-titulo" class="font-display text-3xl font-bold tracking-tight text-white sm:text-4xl">Quiénes somos</h2>
+            <p class="mt-4 text-lg leading-relaxed text-muted">
+              <strong class="font-semibold text-ink">Silph Technologies</strong> es una startup peruana fundada por estudiantes de Ingeniería de Software de la Universidad Peruana de Ciencias Aplicadas (UPC).
+              Creamos TraceHelp para que las mesas de ayuda dejen de resolver a mano los mismos incidentes y dediquen su tiempo a los problemas que de verdad lo necesitan.
+            </p>
+          </div>
+          <dl class="grid gap-6 sm:grid-cols-2">
+            <div class="rounded-2xl border border-navy-700 bg-navy-900 p-6">
+              <dt class="text-sm font-medium text-cyan">Misión</dt>
+              <dd class="mt-2 text-sm leading-relaxed text-muted">Reducir la carga del soporte de primer nivel con IA que responde solo con la documentación de cada empresa y bajo supervisión humana.</dd>
+            </div>
+            <div class="rounded-2xl border border-navy-700 bg-navy-900 p-6">
+              <dt class="text-sm font-medium text-cyan">Visión</dt>
+              <dd class="mt-2 text-sm leading-relaxed text-muted">Ser el copiloto de referencia para las mesas de ayuda de TI de empresas medianas en Latinoamérica.</dd>
+            </div>
+            <div class="rounded-2xl border border-navy-700 bg-navy-900 p-6 sm:col-span-2">
+              <dt class="text-sm font-medium text-cyan">Contacto</dt>
+              <dd class="mt-2 text-sm leading-relaxed text-muted">
+                Escríbenos desde el <a href="#demo" class="text-ink underline decoration-navy-600 underline-offset-4 hover:text-white">formulario de prueba</a>
+                o por los canales del pie de página. Respondemos en un plazo de 24 horas hábiles.
+              </dd>
+            </div>
+          </dl>
+        </div>
+      </section>
+
       <!-- ============ Prueba de concepto (US02) ============ -->
       <section id="demo" class="scroll-mt-16 border-t border-navy-700 bg-navy-950/60">
         <div class="mx-auto grid max-w-7xl gap-12 px-5 py-20 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-16 lg:px-8 lg:py-28">
@@ -339,6 +534,11 @@
                 <p class="mt-1.5 hidden text-xs text-crimson" data-error-for="demo-itsm"></p>
               </div>
 
+              <!-- Datos de la calculadora de ROI (US03); se llenan con "Probarlo con mis datos" -->
+              <input type="hidden" name="tickets_mensuales" data-roi-hidden="tickets" />
+              <input type="hidden" name="analistas_l1" data-roi-hidden="analysts" />
+              <p class="hidden rounded-lg border border-navy-600 bg-navy-950 px-4 py-3 text-xs text-muted" data-roi-demo-note></p>
+
               <!-- Campo trampa para bots: las personas no lo ven -->
               <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" class="hidden" aria-hidden="true" />
 
@@ -352,28 +552,61 @@
     </main>
 
     <!-- ============ Pie de página ============ -->
-    <footer class="border-t border-navy-700 bg-navy-950">
-      <div class="mx-auto flex max-w-7xl flex-col gap-6 px-5 py-10 text-sm text-muted md:flex-row md:items-center md:justify-between lg:px-8">
-        <div class="flex items-center gap-3">
-          <span class="grid size-8 place-items-center rounded-md bg-white"><img src="assets/img/logo-mark.png" alt="" class="size-6" width="24" height="24" /></span>
-          <div>
-            <p class="font-display font-bold text-white">TraceHelp</p>
-            <p class="text-xs">Silph Technologies</p>
+    <footer class="border-t border-navy-700 bg-navy-950" aria-labelledby="pie-titulo">
+      <h2 id="pie-titulo" class="sr-only">Información de TraceHelp</h2>
+      <div class="mx-auto grid max-w-7xl gap-10 px-5 py-14 text-sm text-muted sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1.3fr] lg:px-8">
+        <div>
+          <div class="flex items-center gap-3">
+            <span class="grid size-8 place-items-center rounded-md bg-white"><img src="assets/img/logo-mark.png" alt="" class="size-6" width="24" height="24" /></span>
+            <div>
+              <p class="font-display font-bold text-white">TraceHelp</p>
+              <p class="text-xs">Silph Technologies</p>
+            </div>
           </div>
+          <p class="mt-4 max-w-xs text-xs leading-relaxed">Triaje inteligente de incidentes de TI con respuestas basadas en los manuales de tu empresa y validación humana.</p>
         </div>
-        <ul class="flex flex-wrap gap-x-6 gap-y-2">
-          <li><a href="#capacidades" class="hover:text-white">Capacidades</a></li>
-          <li><a href="#roi" class="hover:text-white">Calculadora ROI</a></li>
-          <li><a href="#seguridad" class="hover:text-white">Seguridad</a></li>
-          <li><a href="#casos" class="hover:text-white">Casos de éxito</a></li>
-        </ul>
-        <p class="text-xs">© 2026 Silph Technologies. Todos los derechos reservados.</p>
+
+        <nav aria-label="Producto">
+          <p class="font-semibold text-ink">Producto</p>
+          <ul class="mt-3 space-y-2">
+            <li><a href="#capacidades" class="hover:text-white">Capacidades</a></li>
+            <li><a href="#roi" class="hover:text-white">Calculadora ROI</a></li>
+            <li><a href="#casos" class="hover:text-white">Casos de éxito</a></li>
+            <li><a href="#demo" class="hover:text-white">Prueba de 14 días</a></li>
+          </ul>
+        </nav>
+
+        <nav aria-label="Empresa">
+          <p class="font-semibold text-ink">Empresa</p>
+          <ul class="mt-3 space-y-2">
+            <li><a href="#nosotros" class="hover:text-white">Quiénes somos</a></li>
+            <li><a href="#seguridad" class="hover:text-white">Seguridad</a></li>
+            <li><a href="privacidad.html" class="hover:text-white">Política de privacidad</a></li>
+          </ul>
+        </nav>
+
+        <div>
+          <p class="font-semibold text-ink">Contacto</p>
+          <ul class="mt-3 space-y-2" data-contact-list>
+            <li><a href="#demo" class="hover:text-white">Formulario de contacto</a></li>
+            <li class="hidden" data-contact="email"><a class="break-all hover:text-white" data-contact-link></a></li>
+            <li class="hidden" data-contact="linkedin"><a class="hover:text-white" target="_blank" rel="noopener" data-contact-link>LinkedIn</a></li>
+            <li class="hidden" data-contact="github"><a class="hover:text-white" target="_blank" rel="noopener" data-contact-link>GitHub</a></li>
+            <li>Lima, Perú</li>
+          </ul>
+        </div>
+      </div>
+      <div class="border-t border-navy-700">
+        <p class="mx-auto max-w-7xl px-5 py-6 text-xs text-muted lg:px-8">© 2026 Silph Technologies. Todos los derechos reservados.</p>
       </div>
     </footer>
 
     <script src="assets/js/config.js"></script>
     <script src="assets/js/main.js"></script>
     <script src="assets/js/simulator.js"></script>
+    <script src="assets/js/roi-calculator.js"></script>
+    <script src="assets/js/success-cases-data.js"></script>
+    <script src="assets/js/success-cases.js"></script>
     <script src="assets/js/demo-form.js"></script>
   </body>
 </html>

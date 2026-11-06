@@ -17,12 +17,16 @@ Antes de hacer commit ejecuta `npm run build` para generar el CSS minificado.
 
 ```
 index.html              # Página principal
+privacidad.html         # Política de privacidad (US04)
 src/input.css           # Tokens de la guía de estilos y componentes (Tailwind)
 assets/css/styles.css   # CSS generado (no editar a mano)
-assets/js/config.js     # URLs externas (portal de Appsmith)
+assets/js/config.js     # URLs externas (portal de Appsmith) y canales de contacto del pie de página
 assets/js/main.js       # Menú móvil y enlaces
 assets/js/simulator.js  # Simulador ilustrativo del triaje
 assets/js/demo-form.js  # Validación y envío del formulario de prueba (Formspree)
+assets/js/success-cases-data.js  # Contenido de los casos de éxito (editar aquí al publicar casos reales)
+assets/js/success-cases.js       # Banner, tarjetas y video de los casos de éxito (US05)
+assets/js/roi-calculator.js  # Calculadora de ROI en el navegador (US03)
 assets/img/             # Logo, favicon e imagen para redes sociales
 ```
 
@@ -33,8 +37,3 @@ https://tracehelp-upc.github.io/tracehelp-landing/
 
 Configuración única del repositorio: **Settings → Pages → Build and deployment → Source: GitHub Actions**.
 
-## Pendiente por tarea del Sprint 1
-
-- T55 (US03): sección `#roi` con la calculadora.
-- T56 (US04): sección `#seguridad`, contacto y política de privacidad.
-- T57 (US05): sección `#casos` con casos de éxito.
