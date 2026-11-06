@@ -20,7 +20,7 @@
   const results = form.querySelector("[data-roi-results]");
   const output = (key) => form.querySelector(`[data-roi-output="${key}"]`);
 
-  const usd = new Intl.NumberFormat("es-PE", { style: "currency", currency: "USD", maximumFractionDigits: 0 });
+  const usd = new Intl.NumberFormat("es-PE", { style: "currency", currency: "USD", currencyDisplay: "narrowSymbol", maximumFractionDigits: 0 });
   const number = new Intl.NumberFormat("es-PE", { maximumFractionDigits: 0 });
   const decimal = new Intl.NumberFormat("es-PE", { maximumFractionDigits: 1 });
 
