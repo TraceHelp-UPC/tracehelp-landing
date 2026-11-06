@@ -17,9 +17,10 @@ Antes de hacer commit ejecuta `npm run build` para generar el CSS minificado.
 
 ```
 index.html              # Página principal
+privacidad.html         # Política de privacidad (US04)
 src/input.css           # Tokens de la guía de estilos y componentes (Tailwind)
 assets/css/styles.css   # CSS generado (no editar a mano)
-assets/js/config.js     # URLs externas (portal de Appsmith)
+assets/js/config.js     # URLs externas (portal de Appsmith) y canales de contacto del pie de página
 assets/js/main.js       # Menú móvil y enlaces
 assets/js/simulator.js  # Simulador ilustrativo del triaje
 assets/js/demo-form.js  # Validación y envío del formulario de prueba (Formspree)
@@ -36,5 +37,4 @@ Configuración única del repositorio: **Settings → Pages → Build and deploy
 
 ## Pendiente por tarea del Sprint 1
 
-- T56 (US04): sección `#seguridad`, contacto y política de privacidad.
 - T57 (US05): sección `#casos` con casos de éxito.
