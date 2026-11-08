@@ -4,12 +4,15 @@
   "description": "",
   "scripts": {
     "build": "tailwindcss -i ./src/input.css -o ./assets/css/styles.css --minify",
-    "dev": "tailwindcss -i ./src/input.css -o ./assets/css/styles.css --watch"
+    "dev": "tailwindcss -i ./src/input.css -o ./assets/css/styles.css --watch",
+    "test": "playwright test",
+    "test:live": "LANDING_URL=https://tracehelp-upc.github.io/tracehelp-landing npx playwright test"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@playwright/test": "^1.65.0",
     "@tailwindcss/cli": "^4.3.4",
     "tailwindcss": "^4.3.4"
   },

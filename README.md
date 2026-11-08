@@ -37,3 +37,28 @@ https://tracehelp-upc.github.io/tracehelp-landing/
 
 Configuración única del repositorio: **Settings → Pages → Build and deployment → Source: GitHub Actions**.
 
+## Pruebas de Aceptación (Playwright · T58 / US05)
+
+La suite automatizada en `tests/landing.spec.js` verifica:
+- Carga de todas las secciones de la portada (`#inicio`, `#capacidades`, `#roi`, `#seguridad`, `#casos`, `#nosotros`, `#demo`).
+- Enlace del botón **Iniciar sesión** hacia `APP_LOGIN_URL` configurado en `assets/js/config.js`.
+- Validaciones en el navegador y flujo de envío del formulario de prueba de concepto (US02).
+- Resultados exactos de la calculadora de ROI (`window.TraceHelpRoi.calculateMonthlyRoi`), traslado al formulario de prueba y validaciones (US03).
+- Tarjetas de casos de éxito y mensaje de recurso no disponible cuando un video no tiene fuente (US05).
+- Enlaces institucionales y navegación a la Política de Privacidad `privacidad.html` (US04).
+- Vista móvil (`375x812`) sin desbordamiento horizontal y apertura/cierre del menú móvil.
+
+### Cómo ejecutar las pruebas
+
+```bash
+# 1. Instalar dependencias y el navegador Chromium de Playwright (solo la primera vez)
+npm install
+npx playwright install chromium
+
+# 2. Ejecutar las pruebas levantando el servidor local automáticamente
+npm test
+
+# 3. (Opcional) Ejecutar contra la landing publicada en GitHub Pages
+npm run test:live
+```
+
