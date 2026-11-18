@@ -4,11 +4,17 @@
   if (!form) return;
 
   // Costos y supuestos de referencia (Capítulo V, RoiEstimation): L1 ≈ $22 por ticket y autoservicio < $2
+  const DEFAULTS = { costL1: 22, costSelfService: 2, currency: "USD" };
+  // costL1, costSelfService y currency son editables (US28); el resto es fijo
   const ASSUMPTIONS = {
-    costL1: 22,
-    costSelfService: 2,
+    ...DEFAULTS,
     deflectionRate: 0.4,
     minutesPerTicket: 20,
+  };
+  const COST_MAX = 100000;
+  const COST_FIELDS = {
+    costL1: { id: "roi-cost-l1", label: "el costo por ticket en Nivel 1" },
+    costSelfService: { id: "roi-cost-self", label: "el costo por ticket de autoservicio" },
   };
 
   const FIELDS = {
@@ -20,12 +26,17 @@
   const results = form.querySelector("[data-roi-results]");
   const output = (key) => form.querySelector(`[data-roi-output="${key}"]`);
 
-  const usd = new Intl.NumberFormat("es-PE", { style: "currency", currency: "USD", currencyDisplay: "narrowSymbol", maximumFractionDigits: 0 });
+  const formatters = {};
+  const usd = {
+    format(value) {
+      const code = ASSUMPTIONS.currency;
+      formatters[code] = formatters[code] || new Intl.NumberFormat("es-PE", { style: "currency", currency: code, currencyDisplay: "narrowSymbol", maximumFractionDigits: 0 });
+      return formatters[code].format(value);
+    },
+  };
   const number = new Intl.NumberFormat("es-PE", { maximumFractionDigits: 0 });
   const decimal = new Intl.NumberFormat("es-PE", { maximumFractionDigits: 1 });
 
-  form.querySelector('[data-roi-assumption="costL1"]').textContent = usd.format(ASSUMPTIONS.costL1);
-  form.querySelector('[data-roi-assumption="costSelfService"]').textContent = usd.format(ASSUMPTIONS.costSelfService);
   form.querySelector('[data-roi-assumption="deflectionRate"]').textContent = `${ASSUMPTIONS.deflectionRate * 100} %`;
   form.querySelector('[data-roi-assumption="minutesPerTicket"]').textContent = `${ASSUMPTIONS.minutesPerTicket} minutos`;
 
@@ -61,6 +72,16 @@
     return { value };
   }
 
+  // Costos editables: deben ser números mayores que cero (no vacíos ni negativos)
+  function readCost(field) {
+    const raw = document.getElementById(field.id).value.trim();
+    if (raw === "") return { error: `Ingresa ${field.label}.` };
+    const value = Number(raw);
+    if (!Number.isFinite(value) || value <= 0) return { error: "Usa un número mayor que cero." };
+    if (value > COST_MAX) return { error: `El máximo permitido es ${number.format(COST_MAX)}.` };
+    return { value };
+  }
+
   function setFieldError(field, message) {
     const input = document.getElementById(field.id);
     const error = form.querySelector(`[data-roi-error-for="${field.id}"]`);
@@ -92,6 +113,24 @@
     const read = { tickets: readField(FIELDS.tickets), analysts: readField(FIELDS.analysts) };
     setFieldError(FIELDS.tickets, read.tickets.error);
     setFieldError(FIELDS.analysts, read.analysts.error);
+
+    const l1 = readCost(COST_FIELDS.costL1);
+    const self = readCost(COST_FIELDS.costSelfService);
+    if (!l1.error && !self.error && self.value >= l1.value) {
+      self.error = "Debe ser menor que el costo en Nivel 1.";
+    }
+    setFieldError(COST_FIELDS.costL1, l1.error);
+    setFieldError(COST_FIELDS.costSelfService, self.error);
+    if (l1.error || self.error) {
+      lastValid = null;
+      clearOutputs();
+      showStatus("Revisa los supuestos del cálculo: los costos deben ser mayores que cero y el de autoservicio menor que el de Nivel 1.");
+      form.querySelector("[data-roi-assumption-fields]").closest("details").open = true;
+      return;
+    }
+    ASSUMPTIONS.costL1 = l1.value;
+    ASSUMPTIONS.costSelfService = self.value;
+    ASSUMPTIONS.currency = document.getElementById("roi-currency").value;
 
     const problems = [read.tickets, read.analysts].filter((r) => r.error);
     if (problems.length) {
@@ -132,6 +171,15 @@
       if (Number.isFinite(value)) range.value = String(Math.min(Math.max(value, Number(range.min)), Number(range.max)));
       update();
     });
+  });
+
+  form.querySelectorAll("[data-roi-cost]").forEach((input) => input.addEventListener("input", update));
+  document.getElementById("roi-currency").addEventListener("change", update);
+  form.querySelector("[data-roi-reset]").addEventListener("click", () => {
+    document.getElementById(COST_FIELDS.costL1.id).value = String(DEFAULTS.costL1);
+    document.getElementById(COST_FIELDS.costSelfService.id).value = String(DEFAULTS.costSelfService);
+    document.getElementById("roi-currency").value = DEFAULTS.currency;
+    update();
   });
 
   form.addEventListener("submit", (event) => {
