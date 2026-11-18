@@ -338,10 +338,32 @@
               </div>
 
               <details class="mt-8 rounded-lg border border-navy-700 bg-navy-950/60 px-4 py-3 text-sm text-muted">
-                <summary class="cursor-pointer font-medium text-ink">Supuestos del cálculo</summary>
+                <summary class="cursor-pointer font-medium text-ink">Supuestos del cálculo (editables)</summary>
+                <div class="mt-4 grid gap-4 sm:grid-cols-3" data-roi-assumption-fields>
+                  <div>
+                    <label for="roi-cost-l1" class="text-xs font-medium text-ink">Costo por ticket en Nivel 1</label>
+                    <input id="roi-cost-l1" type="number" inputmode="decimal" min="0.01" step="0.01" value="22" data-roi-cost="costL1"
+                      class="mt-1.5 w-full rounded-lg border border-navy-600 bg-navy-950 px-3 py-2 text-sm text-ink" />
+                    <p class="mt-1.5 hidden text-xs text-crimson" data-roi-error-for="roi-cost-l1"></p>
+                  </div>
+                  <div>
+                    <label for="roi-cost-self" class="text-xs font-medium text-ink">Costo por ticket de autoservicio</label>
+                    <input id="roi-cost-self" type="number" inputmode="decimal" min="0.01" step="0.01" value="2" data-roi-cost="costSelfService"
+                      class="mt-1.5 w-full rounded-lg border border-navy-600 bg-navy-950 px-3 py-2 text-sm text-ink" />
+                    <p class="mt-1.5 hidden text-xs text-crimson" data-roi-error-for="roi-cost-self"></p>
+                  </div>
+                  <div>
+                    <label for="roi-currency" class="text-xs font-medium text-ink">Moneda</label>
+                    <select id="roi-currency" class="mt-1.5 w-full rounded-lg border border-navy-600 bg-navy-950 px-3 py-2 text-sm text-ink">
+                      <option value="USD" selected>USD (dólar)</option>
+                      <option value="PEN">PEN (sol)</option>
+                      <option value="EUR">EUR (euro)</option>
+                    </select>
+                  </div>
+                </div>
+                <p class="mt-2 text-xs">La moneda solo cambia el símbolo: escribe los costos en la moneda elegida. El costo de L1 debe ser mayor que el de autoservicio.</p>
+                <button type="button" class="mt-3 rounded-md border border-navy-600 px-3 py-1.5 text-xs font-medium text-ink hover:border-cyan hover:text-white" data-roi-reset>Restablecer valores de referencia</button>
                 <ul class="mt-3 space-y-1.5 text-xs leading-relaxed">
-                  <li>Costo de atender un ticket en Nivel 1: <span class="text-ink" data-roi-assumption="costL1"></span>.</li>
-                  <li>Costo de resolverlo por autoservicio con IA: <span class="text-ink" data-roi-assumption="costSelfService"></span>.</li>
                   <li>Tickets que se resuelven por autoservicio: <span class="text-ink" data-roi-assumption="deflectionRate"></span> (referencia conservadora; Freshworks reporta hasta 53 %).</li>
                   <li>Tiempo de un analista por ticket L1: <span class="text-ink" data-roi-assumption="minutesPerTicket"></span>.</li>
                 </ul>
@@ -431,6 +453,54 @@
               <p class="mt-2 text-sm leading-relaxed text-muted">Si la coincidencia con tus manuales no supera el umbral, la IA no responde y el ticket pasa a una persona. Toda respuesta cita su fuente.</p>
             </li>
           </ul>
+
+          <!-- Antes / después del enmascarado PII (US28, heurística #4) -->
+          <div class="mt-16" id="enmascarado" aria-labelledby="enmascarado-titulo" role="group">
+            <h3 id="enmascarado-titulo" class="font-display text-2xl font-bold text-white">Así se ve el enmascarado de datos personales</h3>
+            <p class="mt-3 max-w-2xl text-sm leading-relaxed text-muted">
+              Ejemplo con datos ficticios. Antes de enviar un texto a la IA, TraceHelp reemplaza por etiquetas los nombres, correos, DNI, direcciones IP, teléfonos, usuarios, contraseñas y tokens.
+            </p>
+            <div class="mt-8 grid gap-6 lg:grid-cols-2">
+              <figure class="rounded-2xl border border-navy-700 bg-navy-900 p-4">
+                <figcaption class="mb-3 inline-flex items-center gap-2 rounded-full border border-amber/40 bg-amber/10 px-3 py-1 text-xs font-medium text-amber">Antes: lo que escribe el usuario</figcaption>
+                <img src="assets/img/pii-antes.svg" width="520" height="250" loading="lazy" class="h-auto w-full rounded-lg" data-pii="antes"
+                  alt="Captura ficticia de un ticket con el nombre Juan Ejemplo Prueba, un correo, un DNI, una IP y una clave visibles en texto claro." />
+              </figure>
+              <figure class="rounded-2xl border border-navy-700 bg-navy-900 p-4">
+                <figcaption class="mb-3 inline-flex items-center gap-2 rounded-full border border-emerald/40 bg-emerald/10 px-3 py-1 text-xs font-medium text-emerald">Después: lo que recibe la IA</figcaption>
+                <img src="assets/img/pii-despues.svg" width="520" height="250" loading="lazy" class="h-auto w-full rounded-lg" data-pii="despues"
+                  alt="La misma captura ficticia con nombre, correo, DNI, IP y clave reemplazados por las etiquetas PERSONA, CORREO, DNI, IP y CONTRASENA." />
+              </figure>
+            </div>
+          </div>
+
+          <!-- Preguntas frecuentes de seguridad (US28, heurística #5) -->
+          <div class="mt-16 max-w-3xl" id="faq-seguridad" aria-labelledby="faq-seguridad-titulo" role="group">
+            <h3 id="faq-seguridad-titulo" class="font-display text-2xl font-bold text-white">Preguntas frecuentes de seguridad</h3>
+            <div class="mt-6 space-y-3" data-faq-seguridad>
+              <details class="rounded-xl border border-navy-700 bg-navy-900 px-5 py-4">
+                <summary class="cursor-pointer font-medium text-white">¿Dónde se alojan los datos?</summary>
+                <p class="mt-3 text-sm leading-relaxed text-muted">La API se ejecuta en Render y la base de datos PostgreSQL en Neon, en la región de Estados Unidos (este). Cada organización trabaja en un espacio lógico aislado de las demás.</p>
+              </details>
+              <details class="rounded-xl border border-navy-700 bg-navy-900 px-5 py-4">
+                <summary class="cursor-pointer font-medium text-white">¿Cuánto tiempo se conservan las capturas y los tickets?</summary>
+                <p class="mt-3 text-sm leading-relaxed text-muted">Las capturas de pantalla se conservan 90 días y los tickets con su historial, 24 meses. La bitácora de auditoría se guarda 5 años. Después de esos plazos los datos se eliminan o se anonimizan.</p>
+              </details>
+              <details class="rounded-xl border border-navy-700 bg-navy-900 px-5 py-4">
+                <summary class="cursor-pointer font-medium text-white">¿Qué roles pueden ver las capturas y los tickets?</summary>
+                <p class="mt-3 text-sm leading-relaxed text-muted">TraceHelp tiene cuatro roles. El colaborador ve solo sus propios tickets. El analista L1 y el especialista L2 ven los tickets que atienden. El líder de TI ve las métricas y la bitácora. Cada acceso se valida en el servidor.</p>
+              </details>
+              <details class="rounded-xl border border-navy-700 bg-navy-900 px-5 py-4">
+                <summary class="cursor-pointer font-medium text-white">¿Cómo se cifra la información?</summary>
+                <p class="mt-3 text-sm leading-relaxed text-muted">En tránsito, todas las conexiones usan HTTPS con TLS 1.2 o superior. En reposo, la base de datos cifra el almacenamiento con AES-256. Las contraseñas se guardan con hash y las sesiones usan tokens firmados que expiran. La bitácora es inmutable y cada registro lleva una huella SHA-256.</p>
+              </details>
+              <details class="rounded-xl border border-navy-700 bg-navy-900 px-5 py-4">
+                <summary class="cursor-pointer font-medium text-white">¿Qué certificaciones tienen?</summary>
+                <p class="mt-3 text-sm leading-relaxed text-muted">La certificación ISO/IEC 27001 está en proceso: hoy los controles siguen sus buenas prácticas y se planifica una auditoría externa. El cumplimiento de la Ley N.° 29733 se describe en la <a href="privacidad.html" class="text-cyan underline underline-offset-2 hover:text-white">política de privacidad</a>. Aún no contamos con una certificación SOC 2.</p>
+              </details>
+            </div>
+            <p class="mt-4 text-xs text-muted/80">Información de referencia del proyecto académico TraceHelp (UPC).</p>
+          </div>
         </div>
       </section>
 
