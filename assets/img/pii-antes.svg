@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 250" width="520" height="250" font-family="Inter, Arial, sans-serif">
+  <rect width="520" height="250" rx="12" fill="#0B192C" stroke="#1A3150"/>
+  <rect width="520" height="34" rx="12" fill="#10223A"/>
+  <circle cx="18" cy="17" r="5" fill="#EF4444"/><circle cx="36" cy="17" r="5" fill="#F59E0B"/><circle cx="54" cy="17" r="5" fill="#10B981"/>
+  <text x="76" y="21" font-size="11" fill="#94A3B8">Ticket de ejemplo (datos ficticios)</text>
+  <g font-size="13" fill="#E2E8F0">
+    <text x="24" y="66" fill="#94A3B8">Nombre</text>
+    <text x="24" y="100" fill="#94A3B8">Correo</text>
+    <text x="24" y="134" fill="#94A3B8">DNI</text>
+    <text x="24" y="168" fill="#94A3B8">IP</text>
+    <text x="24" y="202" fill="#94A3B8">Mensaje</text>
+    <text x="110" y="66">Juan Ejemplo Prueba</text>
+    <text x="110" y="100">juan.ejemplo@ejemplo.invalid</text>
+    <text x="110" y="134">00000000</text>
+    <text x="110" y="168">192.0.2.10</text>
+    <text x="110" y="202">No puedo entrar a la VPN desde mi equipo.</text>
+    <text x="110" y="226">Mi clave es Ejemplo-123 (ficticia).</text>
+  </g>
+</svg>
